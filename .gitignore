@@ -32,3 +32,5 @@
 *.app
 
 *.bkp
+*.log
+*.lock
