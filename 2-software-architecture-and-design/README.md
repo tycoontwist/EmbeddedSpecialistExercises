@@ -10,5 +10,5 @@
 
 A PDF document replying to all instructions above.
 
-TODO CG: Link: [Software Architecture and Design](./solution.pdf)
+Link: [Software Architecture and Design](./Exercise_2.pdf)
 
