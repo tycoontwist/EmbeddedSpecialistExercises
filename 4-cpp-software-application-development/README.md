@@ -18,3 +18,6 @@ Deliverables MUST build and run successfully based on README instructions (i.e n
 
 # Solution
 TODO CG: Update readme with steps to rebuild the image with no error.
+
+TODO CG:
+* sudo sh -c 'apt update ; apt install -y build-essential'
