@@ -1,4 +1,5 @@
 #include <fstream>
+#include <filesystem>
 #include <ctime>
 
 #include "logger.hpp"
@@ -26,36 +27,44 @@
 
 Logger::Logger(const std::string& filename)
 {
+    // Check if the logs directory exists, if not create it.
+    std::filesystem::path dir("logs");
+    if (!std::filesystem::exists(dir)) {
+        std::filesystem::create_directory(dir);
+    }
+
     // Initialize the logfile in the logs directory
-    fname.open("logs/" + filename, std::ios_base::app);
+    log_file.open(dir / filename, std::ios_base::app);
+    Logger::log(LogLevel::INFO, "Opening log file.");
 }
 
 Logger::~Logger() {
     // Close the file when complete.
-    if (fname.is_open()) {
-        fname.close();
+    if (log_file.is_open()) {
+        Logger::log(LogLevel::INFO, "Closing log file.");
+        log_file.close();
     }
 }
 
-void Logger::log(LogLevel loglevel, const std::string& message) {
-    if (fname.is_open()) {
-        fname << message << std::endl;
-    }
+std::string Logger::get_time_string() {
+    // Get the current time
+    std::time_t current_time = std::time(nullptr);
+    char time_string[21];
+    std::strftime(time_string, sizeof(time_string), "%Y-%m-%d %H:%M:%S", std::localtime(&current_time));
+
+    return time_string;
 }
 
-// void log(LogLevel level, const std::string& message) {
-//     std::ofstream logFile;
-
-//     // Append to the existing logfile
-//     logFile.open("log.txt", std::ios_base::app);
-
-//     // Get the current time
-//     std::time_t currentTime = std::time(nullptr);
-//     char timeString[100];
-//     std::strftime(timeString, sizeof(timeString), "%Y-%m-%d %H:%M:%S", std::localtime(&currentTime));
-
-//     // Write the log message
-//     logFile << timeString << ": " << message << std::endl;
-
-//     logFile.close();
-// }
+std::string Logger::get_loglevel_string(LogLevel loglevel) {
+    // Get the log level as a string
+    switch (loglevel) {
+        case LogLevel::INFO:
+            return "INFO";
+        case LogLevel::WARNING:
+            return "WARNING";
+        case LogLevel::ERROR:
+            return "ERROR";
+        default:
+            return "UNKNOWN";
+    }
+}

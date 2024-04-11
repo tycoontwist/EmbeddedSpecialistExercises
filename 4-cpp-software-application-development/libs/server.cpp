@@ -4,6 +4,7 @@
 #include <unistd.h>
 
 #include "logger.hpp"
+#include "status.hpp"
 
 
 int main(int argc, char* argv[]) {
@@ -12,55 +13,63 @@ int main(int argc, char* argv[]) {
     Logger logger = Logger(server_logname);
     // Check if an argument was passed in.
     if (argc != 2) {
-        logger.log(LogLevel::INFO, "A message");
+        logger.log(LogLevel::ERROR, "Missing argument");
         std::cerr << "Usage: " << argv[0] << " <socket_path>" << std::endl;
-        return 1;
+
+        return static_cast<int>(STATUS_CODE::INVALID_ARGUMENTS);
     }
 
-    const char* socketPath = argv[1];
+    // Grab the socket path from the argument
+    const char* socket_path = argv[1];
 
-    // Check if the socket already exists
-    if (access(socketPath, F_OK) != -1) {
-        std::cerr << "Socket already exists" << std::endl;
-        return 1;
+    // Create a new socket
+    int server_socket = socket(AF_UNIX, SOCK_STREAM, 0);
+
+    if (server_socket == STATUS_CODE::FAILURE) {
+        logger.log(LogLevel::ERROR, "Failed to create socket");
+        return static_cast<int>(STATUS_CODE::SOCKET_CREATE_ERROR);
+    } else {
+        logger.log(LogLevel::INFO, "Socket created successfully");
     }
 
-    // Create a socket
-    int serverSocket = socket(AF_UNIX, SOCK_STREAM, 0);
-    if (serverSocket == -1) {
-        std::cerr << "Failed to create socket" << std::endl;
-        return 1;
-    }
     // Bind the socket to the specified path
-    sockaddr_un serverAddress;
-    serverAddress.sun_family = AF_UNIX;
-    strncpy(serverAddress.sun_path, socketPath, sizeof(serverAddress.sun_path) - 1);
-    if (bind(serverSocket, reinterpret_cast<sockaddr*>(&serverAddress), sizeof(serverAddress)) == -1) {
-        std::cerr << "Failed to bind socket to " << socketPath << std::endl;
-        close(serverSocket);
-        return 1;
+    // UNIX domain socket; communication between processes on the same host
+    sockaddr_un server_address;
+    server_address.sun_family = AF_UNIX;
+
+    strncpy(server_address.sun_path, socket_path, sizeof(server_address.sun_path) - 1);
+    if (bind(server_socket, reinterpret_cast<sockaddr*>(&server_address), sizeof(server_address)) == -1) {
+        logger.log(LogLevel::ERROR, "Failed to bind socket to %s", socket_path);
+        close(server_socket);
+        return static_cast<int>(STATUS_CODE::SOCKET_BIND_ERROR);
+    } else {
+        logger.log(LogLevel::INFO, "Socket bound to %s", socket_path);
     }
+
     // Listen for incoming connections
-    if (listen(serverSocket, 5) == -1) {
-        std::cerr << "Failed to listen for connections" << std::endl;
-        close(serverSocket);
-        return 1;
+    if (listen(server_socket, MAX_CONNECTIONS) == STATUS_CODE::FAILURE) {
+        logger.log(LogLevel::ERROR, "Failed to listen for connections");
+        close(server_socket);
+        return static_cast<int>(STATUS_CODE::SOCKET_LISTEN_ERROR);
+    } else {
+        logger.log(LogLevel::INFO, "Listening for connections");
     }
-    std::cout << "Server is listening on " << socketPath << std::endl;
+
     // Accept incoming connections
     while (true) {
-        sockaddr_un clientAddress;
-        socklen_t clientAddressLength = sizeof(clientAddress);
-        int clientSocket = accept(serverSocket, reinterpret_cast<sockaddr*>(&clientAddress), &clientAddressLength);
-        if (clientSocket == -1) {
-            std::cerr << "Failed to accept connection" << std::endl;
-            close(serverSocket);
-            return 1;
+        sockaddr_un client_address;
+        socklen_t client_address_length = sizeof(client_address);
+        int client_socket = accept(server_socket, reinterpret_cast<sockaddr*>(&client_address), &client_address_length);
+        if (client_socket == STATUS_CODE::FAILURE) {
+            logger.log(LogLevel::ERROR, "Failed to accept connection");
+            close(server_socket);
+            return static_cast<int>(STATUS_CODE::SOCKET_ACCEPT_ERROR);
         }
         // Handle the connection
-        // ...
-        close(clientSocket);
+        // TODO: Implement connection handling
+        close(client_socket);
     }
-    close(serverSocket);
+    close(server_socket);
     return 0;
 }
+
