@@ -8,7 +8,7 @@
 #include "parser.hpp"
 
 //temp
-#define MAX_BUFFER_SIZE 32
+#define MAX_BUFFER_SIZE 64
 
 
 int main(int argc, char* argv[]) {
@@ -71,11 +71,20 @@ int main(int argc, char* argv[]) {
             close(server_socket);
             return static_cast<int>(STATUS_CODE::SOCKET_ACCEPT_ERROR);
         }
-        // Receive the message
-        char buffer[MAX_BUFFER_SIZE] = {0};
-        recv(client_socket, buffer, sizeof(buffer), 0);
 
-        parser.parse(buffer);
+        char buffer[MAX_BUFFER_SIZE] = {0};
+
+        // Receive the message
+        recv(client_socket, buffer, MAX_BUFFER_SIZE, 0);
+        logger.log(LogLevel::INFO, "Received message: %s", buffer);
+
+        // Parse the message
+        std::string resp = parser.parse(buffer);
+        logger.log(LogLevel::INFO, "Sending response: %s", resp);
+
+        // Send the response
+        send(client_socket, resp.c_str(), resp.size(), 0);
+
         close(client_socket);
     }
     close(server_socket);

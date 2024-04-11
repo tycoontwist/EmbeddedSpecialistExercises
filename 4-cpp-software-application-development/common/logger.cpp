@@ -7,7 +7,7 @@
 Logger::Logger(const std::string& filename)
 {
     // Check if the logs directory exists, if not create it.
-    std::filesystem::path dir("../logs");
+    std::filesystem::path dir("logs");
     if (!std::filesystem::exists(dir)) {
         std::filesystem::create_directory(dir);
     }

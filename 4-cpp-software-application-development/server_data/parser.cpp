@@ -5,7 +5,7 @@
 #include "../common/status.hpp"
 
 
-int Parser::parse(const std::string& command) {
+std::string Parser::parse(const std::string& command) {
     // Convert command to lowercase.
     std::string lower_command = command;
     std::transform(lower_command.begin(), lower_command.end(), lower_command.begin(), ::tolower);
@@ -34,22 +34,18 @@ int Parser::parse(const std::string& command) {
 }
 
 
-int Parser::help() {
-    std::cout << "Help: Display help information" << std::endl;
-    return static_cast<int>(STATUS_CODE::SUCCESS);
+std::string Parser::help() {
+    return "Help: Display help information";
 }
 
-int Parser::quit() {
-    std::cout << "Quit: Exit the program" << std::endl;
-    return static_cast<int>(STATUS_CODE::SUCCESS);
+std::string Parser::quit() {
+    return "Quit: Exit the program";
 }
 
-int Parser::version() {
-    std::cout << GIT_VERSION << std::endl;
-    return static_cast<int>(STATUS_CODE::SUCCESS);
+std::string Parser::version() {
+    return GIT_VERSION;
 }
 
-int Parser::reject() {
-    std::cout << "REJECTED" << std::endl;
-    return static_cast<int>(STATUS_CODE::SUCCESS);
+std::string Parser::reject() {
+    return "REJECTED";
 }

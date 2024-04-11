@@ -21,16 +21,16 @@ private:
     {"quit", COMMANDS::QUIT},
     {"version", COMMANDS::VERSION}};
 
-    int help();
-    int quit();
-    int version();
-    int reject();
+    std::string help();
+    std::string quit();
+    std::string version();
+    std::string reject();
 public:
     // Constructor
     Parser() {};
 
     // Method declarations
-    int parse(const std::string& command);
+    std::string parse(const std::string& command);
 };
 
 #endif // PARSER_HPP
