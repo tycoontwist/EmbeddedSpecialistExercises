@@ -43,7 +43,7 @@ std::string Parser::quit() {
 }
 
 std::string Parser::version() {
-    return GIT_VERSION;
+    return GIT_HASH;
 }
 
 std::string Parser::reject() {

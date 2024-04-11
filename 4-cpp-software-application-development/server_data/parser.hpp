@@ -4,9 +4,6 @@
 #include <map>
 #include <string>
 
-// Placeholder
-#define GIT_VERSION "9622b8ed713f5a90df27a2687463aafc2c9981d1"
-
 enum class COMMANDS {
     HELP,
     QUIT,
@@ -20,6 +17,8 @@ private:
     {"help", COMMANDS::HELP},
     {"quit", COMMANDS::QUIT},
     {"version", COMMANDS::VERSION}};
+
+    std::string git_commit_hash;
 
     std::string help();
     std::string quit();

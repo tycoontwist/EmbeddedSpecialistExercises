@@ -3,6 +3,7 @@ CXX = g++
 
 # Compiler flags
 CXXFLAGS = -Wall -Wextra
+CXXFLAGS += -DGIT_HASH=\"$(shell git rev-parse HEAD)\"
 
 COMMON_DIR = ../common
 SERVER_DIR = .
