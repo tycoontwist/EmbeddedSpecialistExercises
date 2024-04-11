@@ -4,7 +4,11 @@
 #include <unistd.h>
 
 #include "logger.hpp"
+#include "parser.hpp"
 #include "status.hpp"
+
+//temp
+#define MAX_BUFFER_SIZE 32
 
 
 int main(int argc, char* argv[]) {
@@ -55,6 +59,8 @@ int main(int argc, char* argv[]) {
         logger.log(LogLevel::INFO, "Listening for connections");
     }
 
+    Parser parser = Parser();
+
     // Accept incoming connections
     while (true) {
         sockaddr_un client_address;
@@ -65,11 +71,14 @@ int main(int argc, char* argv[]) {
             close(server_socket);
             return static_cast<int>(STATUS_CODE::SOCKET_ACCEPT_ERROR);
         }
-        // Handle the connection
-        // TODO: Implement connection handling
+        // Receive the message
+        char buffer[MAX_BUFFER_SIZE] = {0};
+        recv(client_socket, buffer, sizeof(buffer), 0);
+
+        parser.parse(buffer);
         close(client_socket);
     }
     close(server_socket);
-    return 0;
+    return static_cast<int>(STATUS_CODE::SUCCESS);
 }
 
