@@ -22,10 +22,10 @@ EXEC_SERVER = server
 all: $(EXEC_SERVER)
 
 $(EXEC_SERVER): $(SERVER_OBJ) $(COMMON_OBJ)
-	$(CXX) $(CXXFLAGS) -o $@ $^
+	$(CXX) $(CXXFLAGS) -o ../$@ $^
 
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -I$(COMMON_DIR) -c $< -o $@
 
 clean:
-	rm -f $(COMMON_OBJ) $(SERVER_OBJ) $(EXEC_SERVER)
+	rm -f $(COMMON_OBJ) $(SERVER_OBJ) ../$(EXEC_SERVER)

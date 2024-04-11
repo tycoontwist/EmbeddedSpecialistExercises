@@ -5,7 +5,7 @@ CXX = g++
 CXXFLAGS = -Wall -Wextra
 
 COMMON_DIR = ../common
-SERVER_DIR = .
+CLIENT_DIR = .
 INC_DIR = -I$(COMMON_DIR)
 
 # Source files
@@ -21,14 +21,11 @@ EXEC_CLIENT = client
 
 all: $(EXEC_CLIENT)
 
-$(EXEC_CLIENT): $(SERVER_OBJ) $(COMMON_OBJ)
-	$(CXX) $(CXXFLAGS) -o $@ $^
+$(EXEC_CLIENT): $(CLIENT_OBJ) $(COMMON_OBJ)
+	$(CXX) $(CXXFLAGS) -o ../$@ $^
 
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -I$(COMMON_DIR) -c $< -o $@
 
-client:
-	g++ -o client client_data/main.cpp common/*.cpp
-
 clean:
-	rm -f $(COMMON_OBJ) $(SERVER_OBJ) $(EXEC_CLIENT)
+	rm -f $(COMMON_OBJ) $(CLIENT_OBJ) ../$(EXEC_CLIENT)
