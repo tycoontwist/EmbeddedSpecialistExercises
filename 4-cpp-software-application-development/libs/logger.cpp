@@ -4,27 +4,6 @@
 
 #include "logger.hpp"
 
-// class Logger {
-
-//     void log(LogLevel level, const std::string& message) {
-//         // Write to logfile based on loglevel.
-//         switch (level) {
-//             case INFO:
-//                 std::cout << "[INFO] " << message << std::endl;
-//                 break;
-//             case WARNING:
-//                 std::cout << "[WARNING] " << message << std::endl;
-//                 break;
-//             case ERROR:
-//                 std::cout << "[ERROR] " << message << std::endl;
-//                 break;
-//             default:
-//                 std::cout << "[UNKNOWN] " << message << std::endl;
-//                 break;
-//         }
-//     }
-// };
-
 Logger::Logger(const std::string& filename)
 {
     // Check if the logs directory exists, if not create it.
