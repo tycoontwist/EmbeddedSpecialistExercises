@@ -3,9 +3,9 @@
 #include <sys/un.h>
 #include <unistd.h>
 
-#include "logger.hpp"
+#include "../common/logger.hpp"
+#include "../common/status.hpp"
 #include "parser.hpp"
-#include "status.hpp"
 
 //temp
 #define MAX_BUFFER_SIZE 32
@@ -14,7 +14,7 @@
 int main(int argc, char* argv[]) {
     const std::string& server_logname = "server_logs.log";
 
-    Logger logger = Logger(server_logname);
+    Logger& logger = Logger::get_instance(server_logname);
     // Check if an argument was passed in.
     if (argc != 2) {
         logger.log(LogLevel::ERROR, "Missing argument");

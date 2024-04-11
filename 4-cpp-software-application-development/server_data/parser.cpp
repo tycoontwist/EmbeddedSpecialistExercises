@@ -2,7 +2,7 @@
 #include <algorithm>
 
 #include "parser.hpp"
-#include "status.hpp"
+#include "../common/status.hpp"
 
 
 int Parser::parse(const std::string& command) {

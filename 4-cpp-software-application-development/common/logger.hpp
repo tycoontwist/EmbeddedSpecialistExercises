@@ -17,9 +17,13 @@ private:
     std::ofstream log_file;
     std::string get_time_string();
     std::string get_loglevel_string(LogLevel loglevel);
+
+    Logger(const std::string& filename);
 public:
     // Constructor
-    Logger(const std::string& filename);
+    static Logger& get_instance(const std::string& filename) {
+        return *(new Logger(filename));
+    };
 
     // Destructor
     ~Logger();
