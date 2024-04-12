@@ -3,7 +3,12 @@ CXX = g++
 
 # Compiler flags
 CXXFLAGS = -Wall -Wextra
-CXXFLAGS += -DGIT_HASH=\"$(shell git rev-parse HEAD)\"
+
+# Git hash when running locally
+# CXXFLAGS += -DGIT_HASH=\"$(shell git rev-parse --short HEAD)\"
+
+# We use the GIT_HASH environment variable to pass it into the container
+CXXFLAGS += -DGIT_HASH=\"$(GIT_HASH)\"
 
 COMMON_DIR = ../common
 SERVER_DIR = .

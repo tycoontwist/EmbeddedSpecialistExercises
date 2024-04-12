@@ -21,3 +21,8 @@ TODO CG: Update readme with steps to rebuild the image with no error.
 
 TODO CG:
 * sudo sh -c 'apt update ; apt install -y build-essential'
+* Docker WSL2 integration: must be enabled
+
+Docker commands
+* docker build --build-arg GIT_HASH=$(git rev-parse HEAD) -t application .
+* sudo docker run -it application /bin/bash
