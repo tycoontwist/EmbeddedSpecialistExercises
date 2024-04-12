@@ -4,6 +4,11 @@
 
 #include "logger.hpp"
 
+/**
+ * @brief Construct a new Logger:: Logger object
+ *
+ * @param filename Name of the log file.
+ */
 Logger::Logger(const std::string& filename)
 {
     // Check if the logs directory exists, if not create it.
@@ -17,6 +22,10 @@ Logger::Logger(const std::string& filename)
     Logger::log(LogLevel::INFO, "Opening log file.");
 }
 
+/**
+ * @brief Destroy the Logger object and close the file.
+ *
+ */
 Logger::~Logger() {
     // Close the file when complete.
     if (log_file.is_open()) {
@@ -25,6 +34,11 @@ Logger::~Logger() {
     }
 }
 
+/**
+ * @brief Get the current time as a formatted string.
+ *
+ * @return std::string
+ */
 std::string Logger::get_time_string() {
     // Get the current time
     std::time_t current_time = std::time(nullptr);
@@ -34,6 +48,12 @@ std::string Logger::get_time_string() {
     return time_string;
 }
 
+/**
+ * @brief Get the current loglevel as a string.
+ *
+ * @param loglevel
+ * @return std::string
+ */
 std::string Logger::get_loglevel_string(LogLevel loglevel) {
     // Get the log level as a string
     switch (loglevel) {

@@ -4,13 +4,20 @@
 #include <fstream>
 #include <string>
 
-
+/**
+ * @brief The log level prefix in the log file.
+ *
+ */
 enum LogLevel {
         INFO,
         WARNING,
         ERROR
 };
 
+/**
+ * @brief The logger class object; handles logging to a file.
+ *
+ */
 class Logger {
 
 private:

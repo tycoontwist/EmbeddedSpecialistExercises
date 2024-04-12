@@ -7,8 +7,8 @@
 #include "../common/status.hpp"
 #include "parser.hpp"
 
-//temp
 #define MAX_BUFFER_SIZE 64
+#define MAX_CONNECTIONS 5
 
 
 int main(int argc, char* argv[]) {
@@ -31,6 +31,7 @@ int main(int argc, char* argv[]) {
 
     if (server_socket == STATUS_CODE::FAILURE) {
         logger.log(LogLevel::ERROR, "Failed to create socket");
+        std::cerr << "Failed to create socket" << std::endl;
         return static_cast<int>(STATUS_CODE::SOCKET_CREATE_ERROR);
     } else {
         logger.log(LogLevel::INFO, "Socket created successfully");
@@ -44,6 +45,7 @@ int main(int argc, char* argv[]) {
     strncpy(server_address.sun_path, socket_path, sizeof(server_address.sun_path) - 1);
     if (bind(server_socket, reinterpret_cast<sockaddr*>(&server_address), sizeof(server_address)) == -1) {
         logger.log(LogLevel::ERROR, "Failed to bind socket to %s", socket_path);
+        std::cerr << "Failed to bind socket to " << socket_path << std::endl;
         close(server_socket);
         return static_cast<int>(STATUS_CODE::SOCKET_BIND_ERROR);
     } else {
@@ -53,6 +55,7 @@ int main(int argc, char* argv[]) {
     // Listen for incoming connections
     if (listen(server_socket, MAX_CONNECTIONS) == STATUS_CODE::FAILURE) {
         logger.log(LogLevel::ERROR, "Failed to listen for connections");
+        std::cerr << "Failed to listen for connections" << std::endl;
         close(server_socket);
         return static_cast<int>(STATUS_CODE::SOCKET_LISTEN_ERROR);
     } else {
@@ -68,6 +71,7 @@ int main(int argc, char* argv[]) {
         int client_socket = accept(server_socket, reinterpret_cast<sockaddr*>(&client_address), &client_address_length);
         if (client_socket == STATUS_CODE::FAILURE) {
             logger.log(LogLevel::ERROR, "Failed to accept connection");
+            std::cerr << "Failed to accept connection" << std::endl;
             close(server_socket);
             return static_cast<int>(STATUS_CODE::SOCKET_ACCEPT_ERROR);
         }

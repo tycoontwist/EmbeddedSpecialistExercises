@@ -27,6 +27,7 @@ int main(int argc, char* argv[]) {
 
     if (client_socket == STATUS_CODE::FAILURE) {
         logger.log(LogLevel::ERROR, "Failed to create socket");
+        std::cerr << "Failed to create socket" << std::endl;
         return static_cast<int>(STATUS_CODE::SOCKET_CREATE_ERROR);
     } else {
         logger.log(LogLevel::INFO, "Socket created successfully");
@@ -40,6 +41,7 @@ int main(int argc, char* argv[]) {
 
     if (connect(client_socket, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) == -1) {
         logger.log(LogLevel::ERROR, "Failed to connect to socket %s", socket_path);
+        std::cerr << "Failed to connect to socket " << socket_path << std::endl;
         close(client_socket);
         return static_cast<int>(STATUS_CODE::SOCKET_CONNECT_ERROR);
     }
@@ -47,6 +49,7 @@ int main(int argc, char* argv[]) {
     // Send data to the server
     if (send(client_socket, message, strlen(message), 0) == STATUS_CODE::FAILURE) {
         logger.log(LogLevel::ERROR, "Failed to send command %s data to the server", message);
+        std::cerr << "Failed to send command " << message << " data to the server" << std::endl;
         close(client_socket);
         return static_cast<int>(STATUS_CODE::SOCKET_SEND_ERROR);
     }
@@ -54,6 +57,7 @@ int main(int argc, char* argv[]) {
     char buffer [MAX_BUFFER_SIZE] = {0};
     if (recv(client_socket, buffer, MAX_BUFFER_SIZE, 0) == STATUS_CODE::FAILURE) {
         logger.log(LogLevel::ERROR, "Failed to receive data from the server");
+        std::cerr << "failed to receive data from the server" << std::endl;
         close(client_socket);
         return static_cast<int>(STATUS_CODE::SOCKET_RECEIVE_ERROR);
     }

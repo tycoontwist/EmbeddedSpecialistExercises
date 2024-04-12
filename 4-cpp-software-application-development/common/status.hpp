@@ -1,8 +1,10 @@
 #ifndef STATUS_HPP
 #define STATUS_HPP
 
-const int MAX_CONNECTIONS = 5;
-
+/**
+ * @brief Status codes for the application.
+ *
+ */
 enum STATUS_CODE {
     SUCCESS = 0,
     FAILURE = -1,
