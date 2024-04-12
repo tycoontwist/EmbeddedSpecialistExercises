@@ -1,5 +1,5 @@
 # Compiler
-CXX = g++
+CXX = $(CROSS_COMPILE)g++
 
 # Compiler flags
 CXXFLAGS = -Wall -Wextra
